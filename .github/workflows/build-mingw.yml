@@ -1,0 +1,31 @@
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build-mingw:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@master
+      - env:
+          MSYSTEM: MINGW64
+        run: |
+          $ErrorActionPreference = "Continue"
+          C:\msys64\usr\bin\bash.exe -l -c "pacman -Syu --noconfirm --noprogressbar"
+          C:\msys64\usr\bin\bash.exe -l -c "pacman -Syu --needed --noconfirm --noprogressbar base-devel cmake git mingw-w64-x86_64-toolchain mingw-w64-x86_64-libarchive mingw-w64-x86_64-boost mingw-w64-x86_64-tinyxml2"
+          git fetch --unshallow --tags
+          C:\msys64\usr\bin\bash.exe -l -c "
+            cd /d/a/LxRunOffline/LxRunOffline &&
+            cmake -G 'MSYS Makefiles' -DCMAKE_BUILD_TYPE=Release . &&
+            make -j && make test && make package"
+          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          if ($LASTEXITCODE -ne 0) { Exit 1 }
+
+      - name: Upload result
+        uses: actions/upload-artifact@main
+        if: !cancelled()
+        with:
+          name: lxrunoffline_mingw_${{ env.FILE_DATE }}
+          path: |
+            LxRunOffline-*-mingw.zip
+
