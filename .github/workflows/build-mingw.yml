@@ -2,8 +2,6 @@ on:
   push:
   workflow_dispatch:
 
-env:
-
 jobs:
   build-mingw:
     runs-on: windows-latest
