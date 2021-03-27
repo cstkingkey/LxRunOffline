@@ -45,7 +45,7 @@ jobs:
 
       - name: Upload result
         uses: actions/upload-artifact@main
-        if: !cancelled()
+        if: (!cancelled())
         with:
           name: lxrunoffline_msvc_${{ env.FILE_DATE }}
           path: |
