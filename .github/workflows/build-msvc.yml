@@ -2,6 +2,8 @@ on:
   push:
   workflow_dispatch:
 
+env:
+
 jobs:
   build-msvc:
     runs-on: windows-latest
@@ -39,7 +41,7 @@ jobs:
           if (-not $version.Contains("-")) {
             cmake -DCOMPONENT=choco -DCMAKE_INSTALL_PREFIX="$PWD" -P cmake_install.cmake
           }
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+          echo "FILE_DATE=_$(date /t")" >> $GITHUB_ENV
           echo "FILE_Version = _$(git describe --tags)" >> $GITHUB_ENV
           if ($LASTEXITCODE -ne 0) { Exit 1 }
 
@@ -49,5 +51,5 @@ jobs:
         with:
           name: lxrunoffline_msvc_${{ env.FILE_DATE }}
           path: |
-            LxRunOffline-${{env.FILE_Version}}-msvc.zip
+            LxRunOffline-*-msvc.zip
             lxrunoffline.*.nupkg

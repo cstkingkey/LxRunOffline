@@ -2,6 +2,8 @@ on:
   push:
   workflow_dispatch:
 
+env:
+
 jobs:
   build-mingw:
     runs-on: windows-latest
@@ -17,8 +19,8 @@ jobs:
           C:\msys64\usr\bin\bash.exe -l -c "
             cd /d/a/LxRunOffline/LxRunOffline &&
             cmake -G 'MSYS Makefiles' -DCMAKE_BUILD_TYPE=Release . &&
-            make -j && make test && make package"
-          echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
+            make -j && make test && make package
+            echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV"
           if ($LASTEXITCODE -ne 0) { Exit 1 }
 
       - name: Upload result
