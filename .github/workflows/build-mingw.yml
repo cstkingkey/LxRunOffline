@@ -1,6 +1,8 @@
 on:
-  push:
   workflow_dispatch:
+
+env:
+  REPO_BRANCH: master
 
 jobs:
   build-mingw:
