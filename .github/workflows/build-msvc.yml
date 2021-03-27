@@ -42,7 +42,8 @@ jobs:
           if (-not $version.Contains("-")) {
             cmake -DCOMPONENT=choco -DCMAKE_INSTALL_PREFIX="$PWD" -P cmake_install.cmake
           }
-          echo "FILE_DATE=$(Get-Date -Format 'yyyyMMddHHss')" >> $GITHUB_ENV
+          $df = "FILE_DATE=$(Get-Date -Format 'yyyyMMddHHss')"
+          $GITHUB_ENV += "`r`n" + $df
           echo "FILE_Version = $(git describe --tags)" >> $GITHUB_ENV
           if ($LASTEXITCODE -ne 0) { Exit 1 }
 
